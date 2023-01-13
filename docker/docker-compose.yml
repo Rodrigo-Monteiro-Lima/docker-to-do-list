@@ -1,0 +1,35 @@
+version: '3'
+services:
+  todofront:
+    build: ./todo-app/front-end
+    container_name: todofrontend
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - todoback
+    environment:
+      - REACT_APP_API_HOST=todobackend
+    networks:
+      - trybe-network
+  todoback:
+    build: ./todo-app/back-end
+    container_name: todobackend
+    restart: always
+    ports:
+      - 3001:3001
+    networks:
+      - trybe-network
+  todotests:
+    build: ./todo-app/tests
+    container_name: todotests
+    restart: always
+    depends_on:
+      - todofront
+      - todoback
+    environment:
+      - FRONT_HOST=todofrontend
+    networks:
+      - trybe-network
+networks:
+  trybe-network:
